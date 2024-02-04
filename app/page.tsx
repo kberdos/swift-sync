@@ -45,11 +45,11 @@ export default function Home() {
   }, []);
 
 
-  // useEffect(() => {
-  //   if (session != null) {
-  //     router.push("/organizer");
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (session != null) {
+      router.push("/organizer");
+    }
+  }, [session]);
 
   async function handleSignIn() {
     await authService.signIn();

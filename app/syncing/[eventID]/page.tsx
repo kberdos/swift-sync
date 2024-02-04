@@ -9,6 +9,7 @@ import { userDocument } from "@/util/userFunctions";
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
 import { findTimes } from "@/util/findTimes";
+import { getEvent } from "@/util/userFunctions";
 
 // page to show that the website is syncing
 
@@ -18,9 +19,30 @@ const anek_odia = Anek_Odia({
 });
 
 export default function renderSyncPage({ params }: { params: { eventID: string } }) {
+    const eventID = params.eventID;
     const [session, setSession] = useState<Session | null>(null);
     const [sessionLoading, setSessionLoading] = useState(true);
     const [executed, setExecuted] = useState(false);
+    const [event, setEvent] = useState<any>(null);
+
+    const getCurrentEvent = async () => {
+        await getEvent(eventID).then((event) => {
+            if (event) {
+                setEvent(event);
+            } else {
+                // TODO: 404 page
+                alert("event not found :(")
+            }
+        });
+    }
+
+    useEffect(() => {
+        console.log(event);
+    }, [event])
+
+    useEffect(() => {
+        getCurrentEvent();
+    }, [])
 
     useEffect(() => {
         if (session && !executed) {

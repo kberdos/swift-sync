@@ -1,4 +1,4 @@
-setMinutes(parseInt(event.target.value, 10)); "use client"
+"use client"
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Box from '@mui/material/Box';
@@ -68,12 +68,12 @@ export default function renderOrganizerPage() {
     const [sessionLoading, setSessionLoading] = useState(true);
     const [eventName, setEventName] = React.useState('');
     const [description, setDescription] = React.useState('');
-    const [minutes, setMinutes] = React.useState<string | null>(null);
+    const [minutes, setMinutes] = React.useState<number | null>(null);
     const [startDate, setStartDate] = useState<string | null>(null);
     const [startDate1, setStartDate1] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<string | null>(null);
     const [endDate1, setEndDate1] = useState<Date | null>(null);
-    const [emails, setEmails] = useState([]);
+    const [emails, setEmails] = useState<string[]>([]);
     const [newEmail, setNewEmail] = useState('');
     const [showSubmitButton, setShowSubmitButton] = useState(true);
 
@@ -101,11 +101,16 @@ export default function renderOrganizerPage() {
         console.log(date);
     }
 
+
+
     const handleSubmit = () => {
-        if (eventName == null || description == null || length == null || startDate == null || endDate == null) {
+        if (eventName == null || description == null || minutes == null || startDate == null || endDate == null) {
             return alert("Please check if fields are null")
         } else {
-            createDocument("TBD ID", eventName, description, length, startDate, endDate, emails);
+            const members = emails.map((email) => {
+                return { email: email }
+            })
+            createDocument(session!.user.id, eventName, description, minutes, startDate, endDate, members);
             setShowSubmitButton(false);
         }
     }
@@ -198,7 +203,8 @@ export default function renderOrganizerPage() {
                                                 // const inputValue = event.target.value;
                                                 // const numericValue = parseInt(inputValue, 10);
                                                 // setMinutes(numericValue);
-                                                setMinutes(event.target.value)
+                                                //setMinutes(event.target.value)
+                                                setMinutes(parseInt(event.target.value, 10));
                                                 console.log("minutes:", minutes);
                                             }}
                                         />
