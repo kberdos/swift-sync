@@ -32,47 +32,47 @@ export default function renderSyncPage() {
                         <div className={anek_odia.className + " text-white text-5xl"}> SwiftSync </div>
                     </div>
                     <div className="m-10">
-                        <div className="text-white text-2xl"> We have found the following meeting times based on your Google Calendars. Please select the time that you would like! </div>
+                        <div className="text-white text-2xl"> We have found the following meeting times based on Google Calendar. Please select the time that you would like: </div>
                     </div>
                     <div className="h-1/2 flex gap-10">
                         <div className="w-1/2 grid grid-cols-2 gap-5">
                             <div>
-                                <button className="text-gray-800 text-2xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">Time here</button>
+                                <button className="text-gray-800 text-xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">9:00-10:00am 02/05/2024</button>
                             </div>
                             <div className="text-left">
-                                <div className="text-white text-lg">4/4 available<br />Annie Ye, Kazuya Erdos, Megan Ball, Rachel Brooks</div>
+                                <div className="text-white text-xl">4/4 available:</div>
                             </div>
                             <div>
-                                <button className="text-gray-800 text-2xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">Time here</button>
+                                <button className="text-gray-800 text-xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">10:00-11:00am 02/05/2024</button>
                             </div>
                             <div className="text-left">
-                                <div className="text-white text-lg">4/4 available<br />Annie Ye, Kazuya Erdos, Megan Ball, Rachel Brooks</div>
+                                <div className="text-white text-xl">4/4 available:</div>
                             </div>
                             <div>
-                                <button className="text-gray-800 text-2xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">Time here</button>
+                                <button className="text-gray-800 text-xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">1:00-2:00pm 02/07/2024</button>
                             </div>
                             <div className="text-left">
-                                <div className="text-white text-lg">3/4 available<br />Annie Ye, Kazuya Erdos, Megan Ball</div>
+                                <div className="text-white text-xl">4/4 available:</div>
                             </div>
                         </div>
                         <div className="w-1/2 grid grid-cols-2 gap-5">
                             <div>
-                                <button className="text-gray-800 text-2xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">Time here</button>
+                                <button className="text-gray-800 text-xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">3:00-4:00pm 02/06/2024</button>
                             </div>
                             <div className="text-left">
-                                <div className="text-white text-lg">4/4 available<br />Annie Ye, Kazuya Erdos, Megan Ball, Rachel Brooks</div>
+                                <div className="text-white text-xl">4/4 available:</div>
                             </div>
                             <div>
-                                <button className="text-gray-800 text-2xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">Time here</button>
+                                <button className="text-gray-800 text-xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">11:00-12:00pm 02/05/2024</button>
                             </div>
                             <div className="text-left">
-                                <div className="text-white text-lg">3/4 available<br />Annie Ye, Megan Ball, Rachel Brooks</div>
+                                <div className="text-white text-xl">4/4 available:</div>
                             </div>
                             <div>
-                                <button className="text-gray-800 text-2xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">Time here</button>
+                                <button className="text-gray-800 text-xl cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]">2:00-3:00pm 02/08/2024</button>
                             </div>
                             <div className="text-left">
-                                <div className="text-white text-lg">2/4 available<br />Kazuya Erdos, Megan Ball</div>
+                                <div className="text-white text-xl">4/4 available:</div>
                             </div>
                         </div>
                     </div>

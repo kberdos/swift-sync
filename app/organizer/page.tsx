@@ -1,4 +1,4 @@
-"use client"
+setMinutes(parseInt(event.target.value, 10)); "use client"
 import * as React from "react";
 import { useState, useEffect } from "react";
 import Box from '@mui/material/Box';
@@ -58,22 +58,58 @@ function Label({
 //         setDescription(event.target.value);
 //     };
 // };
+// const [description, setDescription] = React.useState('');
 
-const [eventName, setEventName] = React.useState('');
-
-const startDate = () => {
-    const [startDate, setStartDate] = useState<Date | null>(null);
-}
-
-const handleDateChange = (date: Date | null) => {
-    setStartDate(date);
-};
 
 
 export default function renderOrganizerPage() {
 
     const [session, setSession] = useState<Session | null>(null);
     const [sessionLoading, setSessionLoading] = useState(true);
+    const [eventName, setEventName] = React.useState('');
+    const [description, setDescription] = React.useState('');
+    const [minutes, setMinutes] = React.useState<string | null>(null);
+    const [startDate, setStartDate] = useState<string | null>(null);
+    const [startDate1, setStartDate1] = useState<Date | null>(null);
+    const [endDate, setEndDate] = useState<string | null>(null);
+    const [endDate1, setEndDate1] = useState<Date | null>(null);
+    const [emails, setEmails] = useState([]);
+    const [newEmail, setNewEmail] = useState('');
+    const [showSubmitButton, setShowSubmitButton] = useState(true);
+
+    const addEmail = () => {
+        if (newEmail) {
+            setEmails((prevEmails) => [...prevEmails, newEmail]);
+            setNewEmail('');
+        }
+    }
+
+    const showButton = emails.length < 3;
+
+    const handleEndDateChange = (date: Date | null) => {
+        if (date) {
+            setEndDate(date.toISOString());
+        }
+        console.log(date);
+    }
+
+    const handleStartDateChange = (date: Date | null) => {
+        if (date) {
+            setStartDate(date.toISOString());
+        }
+
+        console.log(date);
+    }
+
+    const handleSubmit = () => {
+        if (eventName == null || description == null || length == null || startDate == null || endDate == null) {
+            return alert("Please check if fields are null")
+        } else {
+            createDocument("TBD ID", eventName, description, length, startDate, endDate, emails);
+            setShowSubmitButton(false);
+        }
+    }
+
 
     const getCurrentSession = async () => {
         authService.getCurrentSession().then((session): any => {
@@ -107,7 +143,7 @@ export default function renderOrganizerPage() {
                         <div className="grid grid-cols-2">
                             <div className="flex flex-col bg-white rounded-md mr-5 items-center">
                                 <div className="mt-8">
-                                    <div className={anek_odia.className + "text-gray-800 text-xl mx-4 center"}>Welcome to SwiftSync! Get started creating your event.</div>
+                                    <div className={anek_odia.className + "text-gray-800 text-xl mx-4 center"}>Welcome to SwiftSync! Get started creating your event:</div>
                                 </div>
                                 <div className="w-1/2">
                                     <Box
@@ -118,13 +154,12 @@ export default function renderOrganizerPage() {
                                         }}
                                         noValidate
                                         autoComplete="off"
+
                                     >
                                         <Textfield id="outlined-basic" label="Name of Event" variant="outlined"
-                                            value={eventName} value={eventName}
                                             onChange={(event) => {
                                                 // event.target.value contains the new value of the Textfield
                                                 setEventName(event.target.value);
-                                                console.log(event.target.value);
                                             }} />
                                     </Box>
 
@@ -137,10 +172,12 @@ export default function renderOrganizerPage() {
                                         noValidate
                                         autoComplete="off"
                                     >
+
                                         <Textfield id="outlined-basic" label="Description" variant="outlined"
                                             onChange={(event) => {
                                                 // event.target.value contains the new value of the Textfield
-                                                console.log(event.target.value);
+                                                setDescription(event.target.value);
+
                                             }} />
                                     </Box>
 
@@ -157,13 +194,17 @@ export default function renderOrganizerPage() {
                                             id="outlined-number"
                                             label="Meeting Length (in minutes)"
                                             type="number"
-                                            InputLabelProps={{
-                                                shrink: true,
+                                            onChange={(event) => {
+                                                // const inputValue = event.target.value;
+                                                // const numericValue = parseInt(inputValue, 10);
+                                                // setMinutes(numericValue);
+                                                setMinutes(event.target.value)
+                                                console.log("minutes:", minutes);
                                             }}
                                         />
                                     </Box>
 
-                                    <div className="text-center text-md">Start Date</div>
+                                    <div className="text-center text-md mt-2">Start Date</div>
 
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
 
@@ -172,13 +213,13 @@ export default function renderOrganizerPage() {
                                             sx={{
                                                 '& > :not(style)': { width: 500, maxWidth: '100%' },
                                             }}
-                                            value={startDate}
-                                            onChange={handleDateChange}
+                                            value={startDate1}
+                                            onChange={handleStartDateChange}
                                         />
 
                                     </LocalizationProvider>
 
-                                    <div className="text-center text-md">End Date</div>
+                                    <div className="text-center text-md mt-2">End Date</div>
 
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
 
@@ -186,7 +227,10 @@ export default function renderOrganizerPage() {
                                             className="w-full"
                                             sx={{
                                                 '& > :not(style)': { width: 500, maxWidth: '100%' },
-                                            }} />
+                                            }}
+                                            value={endDate1}
+                                            onChange={handleEndDateChange}
+                                        />
                                     </LocalizationProvider>
 
 
@@ -195,32 +239,44 @@ export default function renderOrganizerPage() {
 
                             <div className="flex flex-col bg-white rounded-md ml-5 items-center">
                                 <div className="mt-8">
-                                    <div className={anek_odia.className + "text-gray-800 text-xl mx-4 center"}>Invite People to Your Event:</div>
+                                    <div className={anek_odia.className + "text-gray-800 text-xl mx-4 center"}>Invite People to Your Event (Max 3):</div>
                                 </div>
-                                <Box
-                                    className="input box"
-                                    component="form"
-                                    sx={{
-                                        '& > :not(style)': { mt: 2, width: '25ch' },
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <Textfield id="outlined-basic" label="Members" variant="outlined" />
-                                </Box>
-
-                                <div className="flex items-center mt-5">
+                                <div>
+                                    <Box
+                                        className="input box"
+                                        component="form"
+                                        sx={{
+                                            '& > :not(style)': { mt: 2, width: '25ch' },
+                                        }}
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <Textfield id="outlined-basic" label="Members (email)" variant="outlined" value={newEmail} onChange={(event) => {
+                                            setNewEmail(event.target.value);
+                                        }} />
+                                    </Box>
+                                    {showButton && (<button className="text-gray-800 text-xl w-[70px] h-[40px] m-2 rounded-md bg-[#E1DFDF] hover:bg-[#949494]" onClick={addEmail}>Add</button>)}
+                                </div>
+                                {emails.map((email, index) => (<div key={index} className="flex items-center mt-5">
                                     <Image src={Astronaut} width={50} height={50} alt="Astronaut" className="m-2" />
-                                    <div className="text-left text-xl m-3 h-15">Megan Ball<br />megan_ball@brown.edu</div>
-                                </div>
+                                    <div className="text-left text-xl m-3 h-15">{email}</div>
+                                </div>))}
+
+
                             </div>
                         </div>
                     </div >
-                    <div className="flex items-center justify-center m-10">
-                        <button className="text-gray-800 text-3xl cursor-pointer bg-[#E1DFDF] w-[150px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]"
-                            onClick={() => createDocument()} >Submit</button>
-
-                    </div>
+                    {showSubmitButton && (
+                        <div className="flex items-center justify-center m-10">
+                            <button className="text-gray-800 text-3xl cursor-pointer bg-[#E1DFDF] w-[150px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={handleSubmit}
+                            >Submit</button>
+                        </div>
+                    )}
+                    {!showSubmitButton && (
+                        <div className="flex items-center justify-center m-10">
+                            <div className="text-white text-3xl" >Your unique event link: </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div >)

@@ -51,12 +51,12 @@ export const createDocument = async (
   organizerID: string,
   name: string,
   description: string,
-  length: number,
+  length: string,
   startDate: string,
   endDate: string,
   members: []
 ) => {
-  const ref = await addDoc(collection(db, "docs"), {
+  const ref = await addDoc(collection(db, "events"), {
     organizerID: organizerID,
     name: name,
     description: description,
@@ -65,6 +65,15 @@ export const createDocument = async (
     endDate: endDate,
     members: members,
   });
+  console.log(
+    organizerID,
+    name,
+    description,
+    length,
+    startDate,
+    endDate,
+    members
+  );
   return ref.id;
 };
 

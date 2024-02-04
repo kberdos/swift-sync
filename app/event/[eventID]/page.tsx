@@ -6,13 +6,19 @@ import '../../nightsky.scss';
 import authService from "@/services/auth";
 import { userDocument } from "@/util/userFunctions";
 import { Session } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 const anek_odia = Anek_Odia({
     subsets: ["latin"],
     weight: "500"
 });
 
+const organizer_id = "123";
+// const organizer_id = "48b8db4d-ecd3-45eb-8f0f-4566782720dc";
+const all_responded = false;
+
 export default function EventPage({ params }: { params: { eventID: string } }) {
+    const router = useRouter();
     const [eventID, setEventID] = useState(params.eventID);
     const [session, setSession] = useState<Session | null>(null);
     const [sessionLoading, setSessionLoading] = useState(true);
@@ -41,6 +47,18 @@ export default function EventPage({ params }: { params: { eventID: string } }) {
     useEffect(() => {
         getCurrentSession();
     }, []);
+
+    useEffect(() => {
+        if (session != null) {
+            console.log("user id", session.user.id);
+            if (session.user.id === organizer_id) {
+                router.push("/selection");
+            } else {
+                router.push(`/syncing/${eventID}`);
+            }
+        }
+    }, [session]);
+
     return (
         <div>
             <div className="relative">
@@ -53,6 +71,7 @@ export default function EventPage({ params }: { params: { eventID: string } }) {
                     <div className="h-full flex flex-col items-center justify-center text-center">
                         <div>
                             <div className={anek_odia.className + " text-white text-7xl"}> SwiftSync </div>
+                            <div className={anek_odia.className + " text-white text-7xl"}> {eventID} </div>
                         </div>
                         <div>
                             <div className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings! </div>

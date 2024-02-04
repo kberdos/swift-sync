@@ -45,11 +45,11 @@ export default function Home() {
   }, []);
 
 
-  useEffect(() => {
-    if (session != null) {
-      router.push("/organizer");
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session != null) {
+  //     router.push("/organizer");
+  //   }
+  // }, [session]);
 
   async function handleSignIn() {
     await authService.signIn();
@@ -106,7 +106,7 @@ export default function Home() {
               <div className={anek_odia.className + " text-white text-7xl"}> SwiftSync </div>
             </div>
             <div>
-              <div className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings! </div>
+              <div className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings</div>
             </div>
             <div className="m-12">
               <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={session ? handleSignOut : handleSignIn}>
