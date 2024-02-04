@@ -98,6 +98,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                     createCalendarEvent(token, event, selectedTime.start, selectedTime.end)
                 })
             })
+            alert("Events have been created!")
         }
     }
 
