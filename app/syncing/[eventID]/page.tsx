@@ -5,11 +5,12 @@ import '../../nightsky.scss';
 import Planet from "../../../public/images/planet.png";
 import Image from "next/image";
 import authService from "@/services/auth";
-import { userDocument } from "@/util/userFunctions";
+import { addCalendarInfo, getTimes, userDocument } from "@/util/userFunctions";
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
 import { findTimes } from "@/util/findTimes";
 import { getEvent } from "@/util/userFunctions";
+import { useRouter } from "next/navigation";
 
 // page to show that the website is syncing
 
@@ -19,6 +20,7 @@ const anek_odia = Anek_Odia({
 });
 
 export default function renderSyncPage({ params }: { params: { eventID: string } }) {
+    const router = useRouter();
     const eventID = params.eventID;
     const [session, setSession] = useState<Session | null>(null);
     const [sessionLoading, setSessionLoading] = useState(true);
@@ -106,15 +108,10 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
         if (!session) {
             return;
         }
-        console.log("creating event")
-        const localTime = new Date();
-        const utcTime = localTime.toISOString();
-        const localTimePlus301 = new Date();
-        localTimePlus301.setMinutes(localTimePlus301.getMinutes() + 6000);
-        const utcTimePlus301 = localTimePlus301.toISOString();
-        const timeMin = utcTime;
-        const timeMax = utcTimePlus301;
-        await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${timeMin}&timeMax=${timeMax}&maxResults=50&singleEvents=True`, {
+        const times = await getTimes(eventID);
+        const startDate = times!.startDate
+        const endDate = times!.endDate
+        await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${startDate}&timeMax=${endDate}&singleEvents=True`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${session!.provider_token}`,
@@ -123,8 +120,10 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
         }).then((data) => {
             return data.json()
         }).then((data) => {
-            // console.log(data);
-            findTimes(data);
+            const reducedItems = findTimes(data);
+            addCalendarInfo(session!.user.email!, eventID, reducedItems).then(() => {
+                router.push(`/confirmation`)
+            });
         })
     }
 

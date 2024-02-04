@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import authService from "@/services/auth";
 import { User, getAuth, getRedirectResult } from "firebase/auth";
 import { Fira_Sans } from "next/font/google";
-import { updateUserToken, userDocument } from '@/util/userFunctions';
+import { userDocument } from '@/util/userFunctions';
 import { Anek_Odia } from 'next/font/google';
 import { useRouter } from 'next/navigation'
 import { google } from 'googleapis';
@@ -47,7 +47,7 @@ export default function Home() {
 
   useEffect(() => {
     if (session != null) {
-      router.push("/organizer");
+      // router.push("/organizer");
     }
   }, [session]);
 
@@ -109,9 +109,11 @@ export default function Home() {
               <div className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings</div>
             </div>
             <div className="m-12">
+              {/* {!sessionLoading && ( */}
               <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={session ? handleSignOut : handleSignIn}>
-                {sessionLoading ? "Sign In With Google" : session ? "Sign Out" : "Sign In With Google"}
+                {session ? "Sign Out" : "Sign In With Google"}
               </button>
+              {/* )} */}
             </div>
           </div>
         </div>

@@ -18,9 +18,11 @@ import {
 import Grid from '@mui/material/Grid';
 import Image from "next/image";
 import Astronaut from "../../public/images/astronaut.png";
-import { updateName, userDocument, createDocument } from "@/util/userFunctions";
+import { updateName, userDocument, createDocument, addCalendarInfo } from "@/util/userFunctions";
 import authService from "@/services/auth";
 import { Session } from "@supabase/supabase-js";
+import { findTimes } from "@/util/findTimes";
+import { useRouter } from "next/navigation";
 
 
 // page for creating the meeting information
@@ -63,7 +65,7 @@ function Label({
 
 
 export default function renderOrganizerPage() {
-
+    const router = useRouter()
     const [session, setSession] = useState<Session | null>(null);
     const [sessionLoading, setSessionLoading] = useState(true);
     const [eventName, setEventName] = React.useState('');
@@ -76,6 +78,27 @@ export default function renderOrganizerPage() {
     const [emails, setEmails] = useState<string[]>([]);
     const [newEmail, setNewEmail] = useState('');
     const [showSubmitButton, setShowSubmitButton] = useState(true);
+
+    async function getEvents(startDate: any, endDate: any, session: Session) {
+        if (!session) {
+            return;
+        }
+        console.log("getting events")
+        await fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${startDate}&timeMax=${endDate}&singleEvents=True`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${session!.provider_token}`,
+                "Content-Type": "application/json"
+            },
+        }).then((data) => {
+            return data.json()
+        }).then((data) => {
+            const reducedItems = findTimes(data);
+            addCalendarInfo(session!.user.email!, eventID, reducedItems).then(() => {
+                // router.push(`/confirmation`)
+            });
+        })
+    }
 
     const addEmail = () => {
         if (newEmail) {
@@ -101,7 +124,13 @@ export default function renderOrganizerPage() {
         console.log(date);
     }
 
+    const [eventID, setEventID] = useState("");
 
+    useEffect(() => {
+        if (eventID) {
+            getEvents(startDate, endDate, session!);
+        }
+    }, [eventID])
 
     const handleSubmit = () => {
         if (eventName == null || description == null || minutes == null || startDate == null || endDate == null) {
@@ -110,7 +139,10 @@ export default function renderOrganizerPage() {
             const members = emails.map((email) => {
                 return { email: email }
             })
-            createDocument(session!.user.id, eventName, description, minutes, startDate, endDate, members);
+            members.push({ email: session!.user.email! });
+            createDocument(session!.user.id, eventName, description, minutes, startDate, endDate, members, false).then((eventID) => {
+                setEventID(eventID);
+            });
             setShowSubmitButton(false);
         }
     }
@@ -280,7 +312,11 @@ export default function renderOrganizerPage() {
                     )}
                     {!showSubmitButton && (
                         <div className="flex items-center justify-center m-10">
-                            <div className="text-white text-3xl" >Your unique event link: </div>
+                            <div className="text-white text-3xl" >Your unique event link:
+                                <span>
+                                    {eventID ? " http://localhost:3000/event/" + eventID : "..."}
+                                </span>
+                            </div>
                         </div>
                     )}
                 </div>

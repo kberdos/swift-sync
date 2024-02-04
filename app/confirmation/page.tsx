@@ -38,7 +38,7 @@ const renderOrganizerPage = () => {
                             <Image src={Rocket} width={200} height={200} alt="Rocket" className="py-6" />
                         </div>
                         <div>
-                            <div className="text-white text-3xl items-self max-w-prose">We will schedule a Google Calender meeting once everyone has logged in and the organizer has chosen a time.</div>
+                            <div className="text-white text-3xl items-self max-w-prose">We will schedule a Google Calendar meeting once everyone has logged in and the organizer has chosen a time.</div>
                         </div>
                     </div >
                 </div>
