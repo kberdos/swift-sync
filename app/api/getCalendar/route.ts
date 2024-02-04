@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   const calendar = google.calendar({ version: "v3", auth });
   const timeMin = new Date().toISOString();
   const calendarId = "primary";
-  return new NextResponse(JSON.stringify({ calendar: calendar }), {
+  return new NextResponse(JSON.stringify({ calendar: auth }), {
     status: 200,
   });
   try {

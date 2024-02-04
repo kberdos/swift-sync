@@ -47,10 +47,23 @@ export const userDocument = async ({ email, uid }: CreateUserDBProps) => {
   }
 };
 
-export const createDocument = async (userID: string) => {
+export const createDocument = async (
+  organizerID: string,
+  name: string,
+  description: string,
+  length: number,
+  startDate: string,
+  endDate: string,
+  members: []
+) => {
   const ref = await addDoc(collection(db, "docs"), {
-    name: "hello",
-    userID: userID,
+    organizerID: organizerID,
+    name: name,
+    description: description,
+    length: length,
+    startDate: startDate,
+    endDate: endDate,
+    members: members,
   });
   return ref.id;
 };

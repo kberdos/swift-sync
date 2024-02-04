@@ -26,14 +26,14 @@ export default function renderSyncPage() {
                 </div>
                 <div className="absolute h-screen w-screen top-0 center-0 p-8 text-center">
                     <div>
-                        <text className={anek_odia.className + " text-white text-5xl"}> SwiftSync </text>
+                        <div className={anek_odia.className + " text-white text-5xl"}> SwiftSync </div>
                     </div>
                     <div className="h-full flex flex-col items-center justify-center">
                         <div>
-                            <text className="text-white text-6xl"> Syncing your calendar... </text>
+                            <div className="text-white text-6xl"> Syncing your calendar... </div>
                         </div>
                         <div className="m-10">
-                            <Image src={Planet} width={200} height={200} alt="peepe" />
+                            <Image src={Planet} width={200} height={200} alt="Planet" />
                         </div>
                     </div >
                 </div>

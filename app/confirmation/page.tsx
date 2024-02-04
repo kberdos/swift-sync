@@ -17,26 +17,32 @@ const anek_odia = Anek_Odia({
 
 const renderOrganizerPage = () => {
 
-    return(
+    return (
         <div>
-        <div className="relative">
-            <div id="stars-container">
-                <div id="stars"></div>
-                <div id="stars2"></div>
-                <div id="stars3"></div>
-            </div>
-            <div className="absolute h-screen w-screen top-0 center-0 p-8 text-center">
-                <div>
-                    <text className={anek_odia.className + " text-white text-5xl"}> SwiftSync </text>
+
+            <div className="relative">
+                <div id="stars-container">
+                    <div id="stars"></div>
+                    <div id="stars2"></div>
+                    <div id="stars3"></div>
                 </div>
-                <div className="h-full flex flex-col items-center justify-center">
-                    <div className="relative h-screen flex flex-col items-center justify-center">
-                        <text className="text-white text-6xl items-center"> Thank you! </text> <br></br>
-                        <Image src={Rocket} width={200} height={200} alt="" className="py-6"/>
-                        <text className="text-white text-4xl items-self max-w-prose">We will send you an email with your meeting time once everyone has logged in and the organizer has chosen a time.  </text>
+                <div className="absolute h-screen w-screen top-0 center-0 p-8 text-center">
+                    <div>
+                        <div className={anek_odia.className + " text-white text-5xl"}> SwiftSync </div>
                     </div>
-                </div >
+                    <div className="h-full flex flex-col items-center justify-center">
+                        <div>
+                            <div className="text-white text-6xl"> Thank you! </div>
+                        </div>
+                        <div>
+                            <Image src={Rocket} width={200} height={200} alt="Rocket" className="py-6" />
+                        </div>
+                        <div>
+                            <div className="text-white text-3xl items-self max-w-prose">We will schedule a Google Calender meeting once everyone has logged in and the organizer has chosen a time.</div>
+                        </div>
+                    </div >
+                </div>
             </div>
-        </div>
-    </div >)}
+        </div >)
+}
 export default renderOrganizerPage
