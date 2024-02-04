@@ -7,6 +7,7 @@ import { google } from "googleapis";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 
 // page for creating the meeting information
@@ -82,12 +83,11 @@ export default function renderOrganizerPage() {
                                 </Box>
                                 {/* <text className={anek_odia.className + "text-white ml-4"}>Dates:</text> */}
                                 {/* need start date and end date */}
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-
-                                </LocalizationProvider>
-
-
+                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem label={<Label componentName="DatePicker" valueType="date" />}>
+                                        <DatePicker />
+                                    </DemoItem>
+                                </LocalizationProvider> */}
 
                                 {/* <text className={anek_odia.className + "text-white ml-4"}>Meeting Length:</text> */}
                                 <Box

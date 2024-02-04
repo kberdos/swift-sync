@@ -4,6 +4,8 @@ import Textfield from '@mui/material/TextField';
 import { Anek_Odia } from 'next/font/google';
 import '../nightsky.scss';
 import { google } from "googleapis";
+import Planet from "../../public/images/planet.png";
+import Image from "next/image";
 
 // page for creating the meeting information
 
@@ -28,9 +30,10 @@ export default function renderSyncPage() {
                     </div>
                     <div className="h-full flex flex-col item-center justify-center">
                         <div>
-                            <text className="text-white text-6xl"> Syncing your calender... </text>
+                            <text className="text-white text-6xl"> Syncing your calendar... </text>
                         </div>
-                        <img src="../../public/images/planet.png" className="object-contain" />
+                        {/* <img src="../../public/images/planet.png" className="object-contain" /> */}
+                        <Image src={Planet} width={20} height={20} alt="peepe" />
                     </div >
                 </div>
             </div>
