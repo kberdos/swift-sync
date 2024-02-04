@@ -21,18 +21,24 @@ export default function Home() {
   const router = useRouter();
 
   const test = async () => {
-    const res = await fetch('/api/getCalendar/',
-      {
+    try {
+      const response = await fetch('/api/getCalendar', {
         method: 'POST',
+        body: JSON.stringify({ token: idToken }),
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          token: "testToken"
-        })
-      })
-    const data = await res.json()
-    console.log(data)
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        throw new Error('Failed to fetch calendar');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const getCurrentUser = async () => {
@@ -96,7 +102,7 @@ export default function Home() {
               <text className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings! </text>
             </div>
             <div className="m-12">
-              <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[350px] rounded-full h-[50px]" onClick={user ? handleSignOut : handleSignIn}>
+              <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px]" onClick={user ? handleSignOut : handleSignIn}>
                 {userLoading ? "Sign In With Google" : user ? "Sign Out" : "Sign In"}
               </button>
             </div>

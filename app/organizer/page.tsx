@@ -1,3 +1,4 @@
+"use client"
 import * as React from "react";
 import Box from '@mui/material/Box';
 import Textfield from '@mui/material/TextField';
@@ -8,6 +9,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import {
+    Unstable_NumberInput as BaseNumberInput,
+    NumberInputProps,
+    numberInputClasses,
+} from '@mui/base/Unstable_NumberInput';
 
 
 // page for creating the meeting information
@@ -17,27 +23,21 @@ const anek_odia = Anek_Odia({
     weight: "500"
 });
 
-async function getUserCalendarEvents() {
-    const userAccessToken = "YOUR_ACCESS_TOKEN_HERE"; // Replace with the actual access token
-    const auth = new google.auth.OAuth2();
-    auth.setCredentials({ access_token: userAccessToken });
-    const calendar = google.calendar({ version: "v3", auth });
-    const timeMin = new Date().toISOString();
-    const calendarId = "primary";
-    try {
-        const response = await calendar.events.list({
-            calendarId: calendarId,
-            timeMin: timeMin,
-            maxResults: 10,
-        });
-        const events = response.data.items;
-        console.log(events);
-    } catch (error) {
-        console.error();
-    }
+function Label({
+    componentName,
+    valueType,
+}: {
+    componentName: string;
+    valueType: string;
+}) {
+    const content = (
+        <span>
+            <strong>{componentName}</strong>
+        </span>
+    );
+    return content;
 }
 
-// getUserCalendarEvents();
 
 export default function renderOrganizerPage() {
 
@@ -68,7 +68,6 @@ export default function renderOrganizerPage() {
                                 >
                                     <Textfield id="outlined-basic" label="Name of Event" variant="outlined" />
                                 </Box>
-                                {/* <text className={anek_odia.className + "text-white ml-4"}>Description:</text> */}
                                 <Box
                                     className="input box"
                                     component="form"
@@ -81,15 +80,24 @@ export default function renderOrganizerPage() {
                                 >
                                     <Textfield id="outlined-basic" label="Description" variant="outlined" />
                                 </Box>
-                                {/* <text className={anek_odia.className + "text-white ml-4"}>Dates:</text> */}
-                                {/* need start date and end date */}
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoItem label={<Label componentName="DatePicker" valueType="date" />}>
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem
+                                        label={<Label componentName="Start Date" valueType="date" />}>
+                                        <DatePicker sx={{
+                                            marginLeft: '10px',
+                                        }} />
+                                    </DemoItem>
+
+                                </LocalizationProvider>
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DemoItem label={<Label componentName="End Date" valueType="date" />}>
                                         <DatePicker />
                                     </DemoItem>
-                                </LocalizationProvider> */}
 
-                                {/* <text className={anek_odia.className + "text-white ml-4"}>Meeting Length:</text> */}
+                                </LocalizationProvider>
+
                                 <Box
                                     className="input box"
                                     component="form"
@@ -100,9 +108,12 @@ export default function renderOrganizerPage() {
                                     autoComplete="off"
                                     textAlign='center'
                                 >
-                                    <Textfield id="outlined-basic" label="Meeting Length" variant="outlined" />
+                                    <Textfield id="outlined-basic" label="Meeting Length (in minutes)" variant="outlined" inputProps={{
+                                        inputMode: 'numeric',
+                                        pattern: '[0-9]*',
+                                    }} />
                                 </Box>
-                                {/* <text className={anek_odia.className + "text-white ml-4"}>Members:</text> */}
+
                                 <Box
                                     className="input box"
                                     component="form"

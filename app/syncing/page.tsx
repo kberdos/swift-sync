@@ -7,7 +7,7 @@ import { google } from "googleapis";
 import Planet from "../../public/images/planet.png";
 import Image from "next/image";
 
-// page for creating the meeting information
+// page to show that the website is syncing
 
 const anek_odia = Anek_Odia({
     subsets: ["latin"],
@@ -28,12 +28,13 @@ export default function renderSyncPage() {
                     <div>
                         <text className={anek_odia.className + " text-white text-5xl"}> SwiftSync </text>
                     </div>
-                    <div className="h-full flex flex-col item-center justify-center">
+                    <div className="h-full flex flex-col items-center justify-center">
                         <div>
                             <text className="text-white text-6xl"> Syncing your calendar... </text>
                         </div>
-                        {/* <img src="../../public/images/planet.png" className="object-contain" /> */}
-                        <Image src={Planet} width={20} height={20} alt="peepe" />
+                        <div className="m-10">
+                            <Image src={Planet} width={200} height={200} alt="peepe" />
+                        </div>
                     </div >
                 </div>
             </div>
