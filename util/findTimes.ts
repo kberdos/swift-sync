@@ -58,10 +58,7 @@ export const availableTimes = (
   for (let i = 0; i < sortedEvents.length - 1; i++) {
     console.log(`loop iteration ${i}`);
     const currentEventEnd = new Date(
-      Math.max(
-        new Date(latestEndTime).getTime(),
-        new Date(sortedEvents[i].end.dateTime).getTime()
-      )
+      sortedEvents[i].end.dateTime
     ).toISOString();
     const nextEventStart = new Date(
       sortedEvents[i + 1].start.dateTime
@@ -69,7 +66,7 @@ export const availableTimes = (
     console.log("currentEventEnd", currentEventEnd);
     console.log("nextEventStart", nextEventStart);
     if (
-      new Date(currentEventEnd) < new Date(nextEventStart) &&
+      new Date(latestEndTime) < new Date(nextEventStart) &&
       new Date(nextEventStart).getTime() -
         new Date(currentEventEnd).getTime() >=
         length

@@ -21,16 +21,32 @@ import { availableTimes } from "./findTimes";
 interface CreateUserDBProps {
   email: string;
   uid: string;
+  providerToken: string;
 }
 
-export const userDocument = async ({ email, uid }: CreateUserDBProps) => {
+export const userDocument = async ({
+  email,
+  uid,
+  providerToken,
+}: CreateUserDBProps) => {
   const docSnap = await getDoc(doc(db, "users", uid));
   if (!docSnap.exists()) {
     await setDoc(doc(db, "users", uid), {
       email: email,
       uid: uid,
+      providerToken: providerToken,
     });
   }
+};
+
+export const getProviderToken = async (email: string) => {
+  const q = query(collection(db, "users"), where("email", "==", email));
+  const querySnapshot = await getDocs(q);
+  let token = "";
+  querySnapshot.forEach((doc) => {
+    token = doc.data().providerToken;
+  });
+  return token;
 };
 
 export const createDocument = async (
@@ -137,6 +153,9 @@ export const addCalendarInfo = async (
       length
     );
     console.log("available!!!", available);
+    await updateDoc(doc(db, "events", eventID), {
+      available: available,
+    });
   }
 };
 

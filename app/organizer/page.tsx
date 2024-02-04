@@ -153,7 +153,7 @@ export default function renderOrganizerPage() {
             setSession(session);
             if (session) {
                 console.log("got the session. good job bud!")
-                userDocument({ uid: session.user.id, email: session.user.email! }).then(() => {
+                userDocument({ uid: session.user.id, email: session.user.email ?? "", providerToken: session.provider_token! }).then(() => {
                     setSessionLoading(false);
                 })
             }
