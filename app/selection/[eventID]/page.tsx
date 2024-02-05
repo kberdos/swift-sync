@@ -112,7 +112,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                         <div id="stars3"></div>
                     </div>
                     {
-                        !isDone ?
+                        !isDone && available ?
                             <div className="absolute h-screen w-screen top-0 center-0 p-8 text-center items-center">
                                 <div>
                                     <div className={anek_odia.className + " text-white text-5xl"}> SwiftSync </div>
@@ -133,19 +133,19 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                                     <div className="w-1/2">
                                         {/* <div className="w-1/2 grid grid-cols-2 gap-5"> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[0]) }}>{formatISO(available[0].start) ?? ""} {" - "} {formatISO(available[0].end) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[0]) }}>{formatISO(available[0]!.start!) ?? ""} {" - "} {formatISO(available[0]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[2]) }}>{formatISO(available[2].start) ?? ""} {" - "} {formatISO(available[2].end) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[2]) }}>{formatISO(available[2]!.start!) ?? ""} {" - "} {formatISO(available[2]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[4]) }}>{formatISO(available[4].start) ?? ""} {" - "} {formatISO(available[4].end) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[4]) }}>{formatISO(available[4]!.start!) ?? ""} {" - "} {formatISO(available[4]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
@@ -154,19 +154,19 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                                     <div className="w-1/2">
                                         {/* <div className="w-1/2 grid grid-cols-2 gap-5"> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[1]) }}>{formatISO(available[1].start) ?? ""} {" - "} {formatISO(available[1].end) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[1]) }}>{formatISO(available[1]!.start!) ?? ""} {" - "} {formatISO(available[1]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[3]) }}>{formatISO(available[3].start) ?? ""} {" - "} {formatISO(available[3].end) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[3]) }}>{formatISO(available[3]!.start!) ?? ""} {" - "} {formatISO(available[3]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[5]) }}>{formatISO(available[5].start) ?? ""} {" - "} {formatISO(available[5].end) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[5]) }}>{formatISO(available[5]!.start!) ?? ""} {" - "} {formatISO(available[5]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>

@@ -133,7 +133,7 @@ export default function renderOrganizerPage() {
     }, [eventID])
 
     const handleSubmit = () => {
-        if (eventName == null || description == null || minutes == null || startDate == null || endDate == null) {
+        if (emails.length == 0 || eventName == null || description == null || minutes == null || startDate == null || endDate == null) {
             return alert("Please check if fields are null")
         } else {
             const members = emails.map((email) => {
@@ -311,12 +311,19 @@ export default function renderOrganizerPage() {
                         </div>
                     )}
                     {!showSubmitButton && (
-                        <div className="flex items-center justify-center m-10">
-                            <div className="text-white text-3xl" >Your unique event link:
-                                <span>
-                                    {eventID ? " http://localhost:3000/event/" + eventID : "..."}
-                                </span>
-                            </div>
+                        <div className="flex items-center justify-center m-10" onClick={() => {
+                            router.push(`/event/${eventID}`);
+                        }}>
+                            {
+                                eventID &&
+                                <div className="text-white text-3xl" >Your unique event link:
+                                    {" "}
+                                    <span className="underline cursor-pointer">
+                                        {"http://localhost:3000/event/" + eventID}
+                                    </span>
+                                </div>
+                            }
+
                         </div>
                     )}
                 </div>

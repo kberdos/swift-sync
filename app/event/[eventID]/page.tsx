@@ -89,7 +89,6 @@ export default function EventPage({ params }: { params: { eventID: string } }) {
                     <div className="h-full flex flex-col items-center justify-center text-center">
                         <div>
                             <div className={anek_odia.className + " text-white text-7xl"}> SwiftSync </div>
-                            <div className={anek_odia.className + " text-white text-7xl"}> {eventID} </div>
                         </div>
                         <div>
                             <div className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings! </div>
@@ -97,7 +96,7 @@ export default function EventPage({ params }: { params: { eventID: string } }) {
                         <div className="m-12">
                             {!sessionLoading && (
                                 <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={session ? handleSignOut : handleSignIn}>
-                                    {sessionLoading ? "Sign In With Google" : session ? "Sign Out" : "Sign In With Google"}
+                                    {session ? "Sign Out" : "Sign In With Google"}
                                 </button>
                             )}
                         </div>
