@@ -1,5 +1,4 @@
 import { AuthProvider } from "@/contexts/authContext";
-import { fira_sans } from "./layout";
 
 
 export default function RootLayout({
@@ -10,11 +9,7 @@ export default function RootLayout({
 
     return (
         <html lang="en">
-            <AuthProvider>
-                <AuthShell>
-                    <body className={fira_sans.className}>{children}</body>
-                </AuthShell>
-            </AuthProvider>
-        </html>
+            <body>{children}</body>
+        </html >
     );
 }
