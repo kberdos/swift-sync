@@ -4,6 +4,7 @@ import React from 'react';
 import { supabase } from '@/util/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 import { usePathname } from 'next/navigation';
+import { addUserDocument } from '@/util/userFunctions';
 
 interface AuthContextType {
     session: Session | null;
@@ -29,7 +30,11 @@ export const AuthProvider = ({ children }: ProviderProps) => {
             console.log("auth event:", event);
             setSession(session);
             setIsLoggedIn(session !== null);
+            if (session && event == "SIGNED_IN") {
+                addUserDocument({ uid: session.user.id, email: session.user.email ?? "", })
+            }
         });
+
     }, [])
 
     // set the user to logged in if they are redirected to the callback page

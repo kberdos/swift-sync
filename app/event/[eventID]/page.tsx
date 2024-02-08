@@ -4,7 +4,7 @@ import * as React from "react";
 import { Anek_Odia } from 'next/font/google';
 import '../../nightsky.scss';
 import authService from "@/services/auth";
-import { getEvent, userDocument } from "@/util/userFunctions";
+import { getEvent, addUserDocument } from "@/util/userFunctions";
 import { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
@@ -55,7 +55,7 @@ export default function EventPage({ params }: { params: { eventID: string } }) {
             setSession(session);
             if (session) {
                 console.log("got the session. good job bud!")
-                userDocument({ uid: session.user.id, email: session.user.email ?? "", providerToken: session.provider_token! }).then(() => {
+                addUserDocument({ uid: session.user.id, email: session.user.email ?? "", }).then(() => {
                     setSessionLoading(false);
                 })
             }

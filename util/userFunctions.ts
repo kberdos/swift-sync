@@ -21,20 +21,15 @@ import { availableTimes } from "./findTimes";
 interface CreateUserDBProps {
   email: string;
   uid: string;
-  providerToken: string;
 }
 
-export const userDocument = async ({
-  email,
-  uid,
-  providerToken,
-}: CreateUserDBProps) => {
+export const addUserDocument = async ({ email, uid }: CreateUserDBProps) => {
+  console.log("hit");
   const docSnap = await getDoc(doc(db, "users", uid));
   if (!docSnap.exists()) {
     await setDoc(doc(db, "users", uid), {
       email: email,
       uid: uid,
-      providerToken: providerToken,
     });
   }
 };

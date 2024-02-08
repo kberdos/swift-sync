@@ -1,14 +1,10 @@
 'use client'
 import * as React from "react";
-import Box from '@mui/material/Box';
-import Textfield from '@mui/material/TextField';
 import { Anek_Odia } from 'next/font/google';
 import '../../nightsky.scss';
-import { google } from "googleapis";
-import Planet from "../../../public/images/planet.png";
-import Image from "next/image";
 import { useEffect, useState } from 'react';
 import { getEvent, getProviderToken } from "@/util/userFunctions";
+import { useAuth } from "@/contexts/authContext";
 
 
 const anek_odia = Anek_Odia({
@@ -22,8 +18,8 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
 
     const [event, setEvent] = useState<any>(null);
     const [isDone, setIsDone] = useState(false);
-    const [available, setAvailable] = useState<any[]>([])
     const [eventLoading, setEventLoading] = useState(true)
+    const { session } = useAuth();
 
     const loadEvent = async () => {
         getEvent(eventID).then((event) => {
@@ -37,15 +33,8 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
 
     useEffect(() => {
         if (event) {
+            console.log("event", event)
             setIsDone(event.done)
-            if (event.available) {
-                setAvailable(event.available.filter((time: any) => {
-                    const start = new Date(time.start);
-                    const end = new Date(time.end);
-                    const diffInHours: number = Math.abs(end.getTime() - start.getTime()) / 36e5;
-                    return diffInHours <= 1;
-                }));
-            }
             setEventLoading(false)
         }
     }, [event])
@@ -57,11 +46,16 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
 
     const [selectedTime, setSelectedTime] = useState<any>(null);
 
-    async function createCalendarEvent(provider_token: string, event: any, start: string, end: string) {
-        console.log("creating event")
+    async function createCalendarEvent(event: any, members: any[], start: string, end: string) {
+        members.map((member: any) => {
+            return {
+                'email': member.email
+            }
+        })
         const body = {
             'summary': event.name,
             'description': event.description,
+            'attendees': members,
             'start': {
                 'dateTime': start,
                 'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -74,7 +68,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
         await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${provider_token}`,
+                "Authorization": `Bearer ${session!.provider_token}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(body),
@@ -90,14 +84,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
             return;
         }
         if (event.members) {
-            event.members.forEach((member: any) => {
-                const email = member.email
-                console.log("email", email)
-                getProviderToken(email).then((token) => {
-                    console.log("token", token)
-                    createCalendarEvent(token, event, selectedTime.start, selectedTime.end)
-                })
-            })
+            createCalendarEvent(event, event.members, selectedTime.start, selectedTime.end);
             alert("Events have been created!")
         }
     }
@@ -112,7 +99,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                         <div id="stars3"></div>
                     </div>
                     {
-                        !isDone && available ?
+                        !isDone && event.available ?
                             <div className="absolute h-screen w-screen top-0 center-0 p-8 text-center items-center">
                                 <div>
                                     <div className={anek_odia.className + " text-white text-5xl"}> SwiftSync </div>
@@ -133,19 +120,19 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                                     <div className="w-1/2">
                                         {/* <div className="w-1/2 grid grid-cols-2 gap-5"> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[0]) }}>{formatISO(available[0]!.start!) ?? ""} {" - "} {formatISO(available[0]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[0]) }}>{formatISO(event.available[0]!.start!) ?? ""} {" - "} {formatISO(event.available[0]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[2]) }}>{formatISO(available[2]!.start!) ?? ""} {" - "} {formatISO(available[2]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[2]) }}>{formatISO(event.available[2]!.start!) ?? ""} {" - "} {formatISO(event.available[2]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[4]) }}>{formatISO(available[4]!.start!) ?? ""} {" - "} {formatISO(available[4]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[4]) }}>{formatISO(event.available[4]!.start!) ?? ""} {" - "} {formatISO(event.available[4]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
@@ -154,19 +141,19 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                                     <div className="w-1/2">
                                         {/* <div className="w-1/2 grid grid-cols-2 gap-5"> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[1]) }}>{formatISO(available[1]!.start!) ?? ""} {" - "} {formatISO(available[1]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[1]) }}>{formatISO(event.available[1]!.start!) ?? ""} {" - "} {formatISO(event.available[1]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[3]) }}>{formatISO(available[3]!.start!) ?? ""} {" - "} {formatISO(available[3]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[3]) }}>{formatISO(event.available[3]!.start!) ?? ""} {" - "} {formatISO(event.available[3]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(available[5]) }}>{formatISO(available[5]!.start!) ?? ""} {" - "} {formatISO(available[5]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[5]) }}>{formatISO(event.available[5]!.start!) ?? ""} {" - "} {formatISO(event.available[5]!.end!) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>

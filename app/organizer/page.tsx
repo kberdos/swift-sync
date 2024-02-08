@@ -18,8 +18,8 @@ import {
 import Grid from '@mui/material/Grid';
 import Image from "next/image";
 import Astronaut from "../../public/images/astronaut.png";
-import { updateName, userDocument, createDocument, addCalendarInfo } from "@/util/userFunctions";
-import authService from "@/services/auth";
+import { addUserDocument, createDocument, addCalendarInfo } from "@/util/userFunctions";
+import { useAuth } from "@/contexts/authContext";
 import { Session } from "@supabase/supabase-js";
 import { findTimes } from "@/util/findTimes";
 import { useRouter } from "next/navigation";
@@ -66,8 +66,6 @@ function Label({
 
 export default function renderOrganizerPage() {
     const router = useRouter()
-    const [session, setSession] = useState<Session | null>(null);
-    const [sessionLoading, setSessionLoading] = useState(true);
     const [eventName, setEventName] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [minutes, setMinutes] = React.useState<number | null>(null);
@@ -78,6 +76,8 @@ export default function renderOrganizerPage() {
     const [emails, setEmails] = useState<string[]>([]);
     const [newEmail, setNewEmail] = useState('');
     const [showSubmitButton, setShowSubmitButton] = useState(true);
+
+    const { session } = useAuth();
 
     async function getEvents(startDate: any, endDate: any, session: Session) {
         if (!session) {
@@ -146,23 +146,6 @@ export default function renderOrganizerPage() {
             setShowSubmitButton(false);
         }
     }
-
-
-    const getCurrentSession = async () => {
-        authService.getCurrentSession().then((session): any => {
-            setSession(session);
-            if (session) {
-                console.log("got the session. good job bud!")
-                userDocument({ uid: session.user.id, email: session.user.email ?? "", providerToken: session.provider_token! }).then(() => {
-                    setSessionLoading(false);
-                })
-            }
-        });
-    }
-
-    useEffect(() => {
-        getCurrentSession();
-    }, []);
 
     return (
         <div>

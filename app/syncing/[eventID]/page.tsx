@@ -5,7 +5,7 @@ import '../../nightsky.scss';
 import Planet from "../../../public/images/planet.png";
 import Image from "next/image";
 import authService from "@/services/auth";
-import { addCalendarInfo, getTimes, userDocument } from "@/util/userFunctions";
+import { addCalendarInfo, getTimes, addUserDocument } from "@/util/userFunctions";
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
 import { findTimes } from "@/util/findTimes";
@@ -59,7 +59,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
             setSession(session);
             if (session) {
                 console.log("got the session. good job bud!")
-                userDocument({ uid: session.user.id, email: session.user.email ?? "", providerToken: session.provider_token! }).then(() => {
+                addUserDocument({ uid: session.user.id, email: session.user.email ?? "", }).then(() => {
                     setSessionLoading(false);
                 })
             }
