@@ -1,12 +1,6 @@
 import { google } from "googleapis";
 import { NextRequest, NextResponse } from "next/server";
 
-export const config = {
-  api: {
-    bodyParser: true,
-  },
-};
-
 type ReqType = {
   token: string;
 };
