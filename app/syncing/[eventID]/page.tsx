@@ -49,44 +49,9 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
     useEffect(() => {
         if (session && !executed) {
             getEvents(session);
-            // createCalendarEvent(session);
             setExecuted(true);
         }
     }, [session])
-
-    const [start, setStart] = useState<Date>(new Date("2024-02-04T00:00:00"));
-    const [end, setEnd] = useState<Date>(new Date("2024-02-05T00:00:00"));
-
-    async function createCalendarEvent(session: Session) {
-        if (!session) {
-            return;
-        }
-        console.log("creating event")
-        const event = {
-            'summary': "this is an event",
-            'description': "this is the description",
-            'start': {
-                'dateTime': start.toISOString(),
-                'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-            },
-            'end': {
-                'dateTime': end.toISOString(),
-                'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-            },
-        }
-        await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${session!.provider_token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(event),
-        }).then((data) => {
-            return data.json()
-        }).then((data) => {
-            console.log(data);
-        })
-    }
 
     async function getEvents(session: Session) {
         if (!session) {
