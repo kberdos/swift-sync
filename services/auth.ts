@@ -1,24 +1,7 @@
-import {
-  GoogleAuthProvider,
-  getAuth,
-  onAuthStateChanged,
-  signInWithRedirect,
-  User,
-  getRedirectResult,
-  signInWithPopup,
-} from "firebase/auth";
-import { app } from "@/util/firebaseConfig";
 import { supabase } from "@/util/supabaseClient";
 import { Session } from "@supabase/supabase-js";
 
 class AuthService {
-  private auth = getAuth(app);
-  private user: User | null = null;
-  private provider = new GoogleAuthProvider();
-  private email: string = "";
-  private uid: string = "";
-
-  // supabase stuff
   private session: Session | null = null;
   private authStateChangedPromise: Promise<Session | null>;
   private authStateChangedResolve?: (session: Session | null) => void;
@@ -39,10 +22,6 @@ class AuthService {
         this.authStateChangedResolve(session);
         this.authStateChangedResolve = undefined;
       }
-      // createCalendarEvent(session!);
-      // if (session) {
-      //   setSession(session);
-      // }
     });
   }
 

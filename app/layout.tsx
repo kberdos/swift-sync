@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Fira_Sans, Anek_Odia } from "next/font/google";
+import { AuthProvider } from "@/contexts/authContext";
 import "./globals.css";
+import AuthShell from "@/components/authShell";
 
 export const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +21,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body className={fira_sans.className}>{children}</body>
+      <body className={fira_sans.className}>
+        <AuthProvider>
+          <AuthShell>
+            {children}
+          </AuthShell>
+        </AuthProvider>
+      </body>
     </html>
   );
 }
