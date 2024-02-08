@@ -1,59 +1,52 @@
-import {
-  GoogleAuthProvider,
-  getAuth,
-  onAuthStateChanged,
-  signInWithRedirect,
-  User,
-  getRedirectResult,
-} from "firebase/auth";
-import { app } from "@/util/firebaseConfig";
+import { supabase } from "@/util/supabaseClient";
+import { Session } from "@supabase/supabase-js";
 
 class AuthService {
-  private auth = getAuth(app);
-  private user: User | null = null;
-  private provider = new GoogleAuthProvider();
-  private email: string = "";
-  private uid: string = "";
-  private authStateChangedPromise: Promise<User | null>;
-  private authStateChangedResolve?: (user: User | null) => void;
+  private session: Session | null = null;
+  private authStateChangedPromise: Promise<Session | null>;
+  private authStateChangedResolve?: (session: Session | null) => void;
 
   constructor() {
     this.authStateChangedPromise = new Promise((resolve) => {
       this.authStateChangedResolve = resolve;
     });
 
-    onAuthStateChanged(this.auth, (user) => {
-      console.log("auth state change");
-      if (user) {
-        this.user = user;
-        this.email = user.email || "";
-        this.uid = user.uid;
-      } else {
-        console.log("no user");
+    supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Authentication event", event);
+      console.log("Current session", session);
+      if (session) {
+        this.session = session;
       }
 
       if (this.authStateChangedResolve) {
-        this.authStateChangedResolve(user);
+        this.authStateChangedResolve(session);
         this.authStateChangedResolve = undefined;
       }
     });
   }
 
-  async getCurrentUser() {
+  async getCurrentSession() {
     await this.authStateChangedPromise;
-    return this.user;
+    return this.session;
   }
 
   async signIn() {
-    await signInWithRedirect(this.auth, this.provider);
-    getRedirectResult(this.auth).then((result) => {
-      console.log(result);
+    console.log("signing in");
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `/auth/callback`,
+        scopes: "https://www.googleapis.com/auth/calendar",
+      },
     });
+    if (error) {
+      console.log(error);
+    }
   }
 
   async signOut() {
     console.log("signing out");
-    await this.auth.signOut();
+    await supabase.auth.signOut();
   }
 }
 
