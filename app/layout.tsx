@@ -4,9 +4,7 @@ import { AuthProvider } from "@/contexts/authContext";
 import "./globals.css";
 import AuthShell from "@/components/authShell";
 
-export const inter = Inter({ subsets: ["latin"] });
-
-export const fira_sans = Fira_Sans({
+const fira_sans = Fira_Sans({
   subsets: ["latin"],
   weight: "400"
 });
