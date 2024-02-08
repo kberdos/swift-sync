@@ -4,13 +4,13 @@ import { Anek_Odia } from 'next/font/google';
 import '../../nightsky.scss';
 import Planet from "../../../public/images/planet.png";
 import Image from "next/image";
-import authService from "@/services/auth";
 import { addCalendarInfo, getTimes, addUserDocument } from "@/util/userFunctions";
 import { Session } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
 import { findTimes } from "@/util/findTimes";
 import { getEvent } from "@/util/userFunctions";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/authContext";
 
 // page to show that the website is syncing
 
@@ -22,10 +22,10 @@ const anek_odia = Anek_Odia({
 export default function renderSyncPage({ params }: { params: { eventID: string } }) {
     const router = useRouter();
     const eventID = params.eventID;
-    const [session, setSession] = useState<Session | null>(null);
-    const [sessionLoading, setSessionLoading] = useState(true);
     const [executed, setExecuted] = useState(false);
     const [event, setEvent] = useState<any>(null);
+
+    const { session } = useAuth()
 
     const getCurrentEvent = async () => {
         await getEvent(eventID).then((event) => {
@@ -53,22 +53,6 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
             setExecuted(true);
         }
     }, [session])
-
-    const getCurrentSession = async () => {
-        authService.getCurrentSession().then((session): any => {
-            setSession(session);
-            if (session) {
-                console.log("got the session. good job bud!")
-                addUserDocument({ uid: session.user.id, email: session.user.email ?? "", }).then(() => {
-                    setSessionLoading(false);
-                })
-            }
-        });
-    }
-
-    useEffect(() => {
-        getCurrentSession();
-    }, []);
 
     const [start, setStart] = useState<Date>(new Date("2024-02-04T00:00:00"));
     const [end, setEnd] = useState<Date>(new Date("2024-02-05T00:00:00"));

@@ -66,10 +66,9 @@ export const availableTimes = (
     console.log("currentEventEnd", currentEventEnd);
     console.log("nextEventStart", nextEventStart);
     if (
-      new Date(latestEndTime) < new Date(nextEventStart) &&
-      new Date(nextEventStart).getTime() -
-        new Date(currentEventEnd).getTime() >=
-        length
+      new Date(latestEndTime).getTime() < new Date(nextEventStart).getTime() &&
+      new Date(nextEventStart).getTime() - new Date(latestEndTime).getTime() <=
+        length * 60000
     ) {
       availableTimes.push({
         start: currentEventEnd,
@@ -85,59 +84,3 @@ export const availableTimes = (
   }
   return availableTimes;
 };
-
-const myEvents: Event[] = [
-  {
-    start: {
-      dateTime: "2024-02-04T14:00:00-05:00",
-      timeZone: "America/Los_Angeles",
-    },
-    end: {
-      dateTime: "2024-02-04T15:00:00-05:00",
-      timeZone: "America/Los_Angeles",
-    },
-    summary: "Event 1",
-  },
-  {
-    start: {
-      dateTime: "2024-02-04T16:30:00-05:00",
-      timeZone: "America/Los_Angeles",
-    },
-    end: {
-      dateTime: "2024-02-04T17:30:00-05:00",
-      timeZone: "America/Los_Angeles",
-    },
-    summary: "Event 2",
-  },
-  // Add more events as needed
-];
-const startTime: TimeFrame = {
-  dateTime: "2024-02-04T12:00:00-05:00",
-  timeZone: "America/Los_Angeles",
-};
-const endTime: TimeFrame = {
-  dateTime: "2024-02-04T18:00:00-05:00",
-  timeZone: "America/Los_Angeles",
-};
-
-interface Event {
-  start: {
-    dateTime: string;
-    timeZone: string;
-  };
-  end: {
-    dateTime: string;
-    timeZone: string;
-  };
-  summary: string;
-}
-
-interface TimeFrame {
-  dateTime: string;
-  timeZone: string;
-}
-
-interface TimeSlot {
-  start: string;
-  end: string;
-}

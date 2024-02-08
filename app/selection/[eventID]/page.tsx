@@ -19,7 +19,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
     const [event, setEvent] = useState<any>(null);
     const [isDone, setIsDone] = useState(false);
     const [eventLoading, setEventLoading] = useState(true)
-    const { session } = useAuth();
+    const { session, login } = useAuth();
 
     const loadEvent = async () => {
         getEvent(eventID).then((event) => {
@@ -32,6 +32,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
     }, [])
 
     useEffect(() => {
+        console.log("event", event)
         if (event) {
             console.log("event", event)
             setIsDone(event.done)
@@ -45,6 +46,14 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
     }
 
     const [selectedTime, setSelectedTime] = useState<any>(null);
+
+    // TODO: This is a really bad way of handling this, need to figure out how to use refresh tokens
+    async function handleCreateError() {
+        // re-login 
+        await login()
+        // create calendar event again 
+        createCalendarEvent(event, event.members, selectedTime.start, selectedTime.end);
+    }
 
     async function createCalendarEvent(event: any, members: any[], start: string, end: string) {
         members.map((member: any) => {
@@ -76,6 +85,8 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
             return data.json()
         }).then((data) => {
             console.log(data);
+        }).catch((error) => {
+            handleCreateError();
         })
     }
     const handleSubmit = async () => {
@@ -99,7 +110,7 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                         <div id="stars3"></div>
                     </div>
                     {
-                        !isDone && event.available ?
+                        !isDone ?
                             <div className="absolute h-screen w-screen top-0 center-0 p-8 text-center items-center">
                                 <div>
                                     <div className={anek_odia.className + " text-white text-5xl"}> SwiftSync </div>
@@ -120,19 +131,19 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                                     <div className="w-1/2">
                                         {/* <div className="w-1/2 grid grid-cols-2 gap-5"> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[0]) }}>{formatISO(event.available[0]!.start!) ?? ""} {" - "} {formatISO(event.available[0]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[0]) }}>{formatISO(event.available[0].start) ?? ""} {" - "} {formatISO(event.available[0].end) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[2]) }}>{formatISO(event.available[2]!.start!) ?? ""} {" - "} {formatISO(event.available[2]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[2]) }}>{formatISO(event.available[2].start) ?? ""} {" - "} {formatISO(event.available[2].end) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[4]) }}>{formatISO(event.available[4]!.start!) ?? ""} {" - "} {formatISO(event.available[4]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[4]) }}>{formatISO(event.available[4].start) ?? ""} {" - "} {formatISO(event.available[4].end) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
@@ -141,19 +152,19 @@ export default function renderSyncPage({ params }: { params: { eventID: string }
                                     <div className="w-1/2">
                                         {/* <div className="w-1/2 grid grid-cols-2 gap-5"> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[1]) }}>{formatISO(event.available[1]!.start!) ?? ""} {" - "} {formatISO(event.available[1]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[1]) }}>{formatISO(event.available[1].start) ?? ""} {" - "} {formatISO(event.available[1].end) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[3]) }}>{formatISO(event.available[3]!.start!) ?? ""} {" - "} {formatISO(event.available[3]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[3]) }}>{formatISO(event.available[3].start) ?? ""} {" - "} {formatISO(event.available[3].end) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>
                                         </div> */}
                                         <div>
-                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[5]) }}>{formatISO(event.available[5]!.start!) ?? ""} {" - "} {formatISO(event.available[5]!.end!) ?? ""}</button>
+                                            <button className="mt-5 text-gray-800 text-lg cursor-pointer bg-white w-full rounded-md h-[50px] shadow-md hover:bg-[#CDE9FE] focus:bg-[#69BDFB] active:bg-[#3279AF]" onClick={() => { setSelectedTime(event.available[5]) }}>{formatISO(event.available[5].start) ?? ""} {" - "} {formatISO(event.available[5].end) ?? ""}</button>
                                         </div>
                                         {/* <div className="text-left">
                                             <div className="text-white text-xl">4/4 available:</div>

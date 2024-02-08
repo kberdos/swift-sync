@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import * as React from "react";
 import { Anek_Odia } from 'next/font/google';
 import '../../nightsky.scss';
-import authService from "@/services/auth";
-import { getEvent, addUserDocument } from "@/util/userFunctions";
-import { Session } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/authContext";
+import { getEvent } from "@/util/userFunctions";
 
 const anek_odia = Anek_Odia({
     subsets: ["latin"],
@@ -16,55 +15,24 @@ const anek_odia = Anek_Odia({
 export default function EventPage({ params }: { params: { eventID: string } }) {
     const router = useRouter();
     const [eventID, setEventID] = useState(params.eventID);
-    const [session, setSession] = useState<Session | null>(null);
-    const [sessionLoading, setSessionLoading] = useState(true);
 
     const [event, setEvent] = useState<any>(null);
     const [organizerID, setOrganizerID] = useState<any>(null);
 
-    const getCurrentEvent = async () => {
-        await getEvent(eventID).then((event) => {
-            if (event) {
-                setEvent(event);
-            }
-        })
-    }
+    const { session, login, logout } = useAuth();
+
 
     useEffect(() => {
-        getCurrentEvent();
-    }, [])
-
-
+        getEvent(eventID).then((event) => {
+            setEvent(event);
+        })
+    }, [eventID])
     useEffect(() => {
         if (event) {
             setOrganizerID(event.organizerID)
         }
     }, [event])
 
-    async function handleSignIn() {
-        await authService.signIn();
-    }
-
-    async function handleSignOut() {
-        await authService.signOut();
-        setSession(null);
-    }
-
-    const getCurrentSession = async () => {
-        authService.getCurrentSession().then((session): any => {
-            setSession(session);
-            if (session) {
-                console.log("got the session. good job bud!")
-                addUserDocument({ uid: session.user.id, email: session.user.email ?? "", }).then(() => {
-                    setSessionLoading(false);
-                })
-            }
-        });
-    }
-
-    useEffect(() => {
-        getCurrentSession();
-    }, []);
 
     useEffect(() => {
         if (session != null && organizerID) {
@@ -94,11 +62,9 @@ export default function EventPage({ params }: { params: { eventID: string } }) {
                             <div className="text-white text-2xl"> Effortlessly synchronize calendars and schedule meetings! </div>
                         </div>
                         <div className="m-12">
-                            {!sessionLoading && (
-                                <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={session ? handleSignOut : handleSignIn}>
-                                    {session ? "Sign Out" : "Sign In With Google"}
-                                </button>
-                            )}
+                            <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={session ? logout : login}>
+                                {session ? "Sign Out" : "Sign In With Google"}
+                            </button>
                         </div>
                     </div>
                 </div>

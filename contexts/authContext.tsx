@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     useEffect(() => {
         supabase.auth.onAuthStateChange((event, session) => {
             console.log("auth event:", event);
+            console.log("auth session:", session);
             setSession(session);
             setIsLoggedIn(session !== null);
             if (session && event == "SIGNED_IN") {

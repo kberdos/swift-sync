@@ -14,37 +14,6 @@ export default function Home() {
   const router = useRouter();
   const { session, logout } = useAuth();
 
-  const handleCreateEvent = async () => {
-    console.log("creating event")
-    const body = {
-      'summary': 'new event',
-      'description': 'awdaw',
-      'attendees': [
-        { 'email': 'kazuyaberdos@gmail.com' },
-      ],
-      'start': {
-        'dateTime': '2024-02-09T22:15:00.000Z',
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-      'end': {
-        'dateTime': '2024-02-09T22:45:00.000Z',
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
-      },
-    }
-    await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${session?.provider_token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body),
-    }).then((data) => {
-      return data.json()
-    }).then((data) => {
-      console.log(data);
-    })
-  }
-
   const handleSendEmail = async () => {
     console.log("in the handler")
     const res = await fetch('/brevo/sendEmail', {
@@ -79,7 +48,7 @@ export default function Home() {
               Create event
             </button> */}
             <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={() => { router.push("/organizer") }}>
-              go to organizer's page
+              Create Event
             </button>
 
           </div>
