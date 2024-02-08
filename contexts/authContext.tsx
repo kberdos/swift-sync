@@ -23,10 +23,14 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const pathName = usePathname();
 
-    supabase.auth.onAuthStateChange((event, session) => {
-        setSession(session);
-        setIsLoggedIn(session !== null);
-    });
+    // VERY important: listen for auth state changes
+    useEffect(() => {
+        supabase.auth.onAuthStateChange((event, session) => {
+            console.log("auth event:", event);
+            setSession(session);
+            setIsLoggedIn(session !== null);
+        });
+    }, [])
 
     // set the user to logged in if they are redirected to the callback page
     useEffect(() => {

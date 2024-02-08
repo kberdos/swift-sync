@@ -42,9 +42,6 @@ export default function Home() {
             <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={logout}>
               Sign out
             </button>
-            <button className="text-gray-800 text-3xl cursor-pointer bg-white w-[325px] rounded-md h-[50px] shadow-md hover:bg-[#949494] focus:bg-[#949494] active:bg-[#949494]" onClick={handleSendEmail}>
-              Send email :D
-            </button>
           </div>
         </div>
       </Stars>
