@@ -3,6 +3,22 @@ import { getSession } from '@auth0/nextjs-auth0';
 export default async function ProfileServer() {
   const session = await getSession();
 
+  const testFetch = async () => {
+    "use server"
+    const url = process.env.NEXT_PUBLIC_backendDomain + "/client/test"
+    const body = {
+      uid: "hello"
+    }
+    console.log(body)
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    })
+    const resJSON = await res.json()
+    console.log("res", resJSON)
+  }
+
   if (!session) {
     return (
       <div>
@@ -17,6 +33,9 @@ export default async function ProfileServer() {
   return (
     user && (
       <div>
+        <form action={testFetch}>
+          <button type='submit'>test</button>
+        </form>
         <div>
           <a href="/api/auth/login">Log In</a>
         </div>
