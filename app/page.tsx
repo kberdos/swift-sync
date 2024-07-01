@@ -9,7 +9,6 @@ export default async function ProfileServer() {
     const body = {
       uid: "hello"
     }
-    console.log(body)
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
