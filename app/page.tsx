@@ -1,47 +1,48 @@
-import { getSession } from '@auth0/nextjs-auth0';
+'use client'
+import { useUser } from "@auth0/nextjs-auth0/client";
 
-export default async function ProfileServer() {
-  const session = await getSession();
+export default function Home() {
+  const { user, isLoading } = useUser()
 
-  const testFetch = async () => {
-    "use server"
-    const url = process.env.NEXT_PUBLIC_backendDomain + "/client/test"
-    const body = {
-      uid: "hello"
+  async function handleTestUser() {
+    if (!user) {
+      return
     }
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    })
-    const resJSON = await res.json()
-    console.log("res", resJSON)
+
+    const res = await fetch(process.env.NEXT_PUBLIC_backendDomain + "/client/user",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subclaim: user.sub
+        })
+      })
+
   }
 
-  if (!session) {
+  if (isLoading) {
+    return (
+      <div>Loading...</div>
+    )
+  }
+
+  if (!user) {
     return (
       <div>
-        <div>
-          <a href="/api/auth/login">Log In</a>
-        </div>
+        <a href="/api/auth/login">Log In</a>
       </div>
     )
   }
 
-  const { user } = session
   return (
     user && (
       <div>
-        <form action={testFetch}>
-          <button type='submit'>test</button>
-        </form>
         <div>
-          <a href="/api/auth/login">Log In</a>
+          <button onClick={handleTestUser}> Test User</button>
         </div>
-        <div>
-          <a href="/api/auth/logout">Log Out</a>
-        </div>
-        <img src={user.picture} alt={user.name} />
+        <a href="/api/auth/logout">Log Out</a>
+        <div>{user.name}</div>
+        <img src={user.picture!} alt={user.name!} />
         <h2>{user.name}</h2>
         <p>{user.email}</p>
       </div>
