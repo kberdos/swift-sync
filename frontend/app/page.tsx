@@ -1,5 +1,6 @@
 'use client'
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { fetchWithAuth } from "./utils/auth_utils";
 
 export default function Home() {
   const { user, isLoading } = useUser()
@@ -10,7 +11,7 @@ export default function Home() {
       return
     }
 
-    const res = await fetch(process.env.NEXT_PUBLIC_backendDomain + "/client/testSupabase",
+    const res = await fetchWithAuth(process.env.NEXT_PUBLIC_backendDomain + "/client/testSupabase",
       {
         method: "GET",
       })

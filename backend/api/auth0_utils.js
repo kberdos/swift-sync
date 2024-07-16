@@ -1,5 +1,6 @@
 import 'dotenv/config'
 
+
 const prefixes = [
 	"auth0|",
 	"google-oauth2",

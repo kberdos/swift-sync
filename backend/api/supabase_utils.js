@@ -12,7 +12,6 @@ export async function retrieveProducts() {
 	return data
 }
 
-
 export async function createItem() {
 	const { error } = await supabase
 		.from('products')

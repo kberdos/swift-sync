@@ -3,7 +3,8 @@ const app = express()
 import 'dotenv/config'
 import { registerRoute } from './api/utils.js'
 import { PostClientTest, PostClientTestSupbase, PostClientTestUser } from './api/metadata.js'
-import { handleGetTestSupbase, handlePostTest, handlePostTestUser } from './routes/clientRoutes.js'
+import { handlePostTest, handlePostTestUser } from './routes/clientRoutes.js'
+import { handleGetTestSupbase } from "./routes/handleGetTestSupbase.1.js"
 
 app.use(express.json())
 import cors from 'cors'
