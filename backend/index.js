@@ -2,8 +2,8 @@ import express from 'express'
 const app = express()
 import 'dotenv/config'
 import { registerRoute } from './api/utils.js'
-import { PostClientTest, PostClientTestUser } from './api/metadata.js'
-import { handlePostTest, handlePostTestUser } from './routes/clientRoutes.js'
+import { PostClientTest, PostClientTestSupbase, PostClientTestUser } from './api/metadata.js'
+import { handleGetTestSupbase, handlePostTest, handlePostTestUser } from './routes/clientRoutes.js'
 
 app.use(express.json())
 import cors from 'cors'
@@ -28,6 +28,11 @@ registerRoute(app, PostClientTest, async (req, res) => {
 registerRoute(app, PostClientTestUser, async (req, res) => {
 	const { subclaim } = req.body
 	const responseBody = await handlePostTestUser({ subclaim })
+	res.send({ code: 1, body: responseBody })
+})
+
+registerRoute(app, PostClientTestSupbase, async (req, res) => {
+	const responseBody = await handleGetTestSupbase()
 	res.send({ code: 1, body: responseBody })
 })
 

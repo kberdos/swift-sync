@@ -8,3 +8,7 @@ export const PostClientTestUser = {
 	route: '/client/user'
 }
 
+export const PostClientTestSupbase = {
+	method: 'get',
+	route: '/client/testSupabase'
+}
